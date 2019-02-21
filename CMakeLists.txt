@@ -67,17 +67,12 @@ function(link_to_source base_name)
     # Get OS dependent path to use in `execute_process`
     file(TO_NATIVE_PATH "${CMAKE_CURRENT_BINARY_DIR}/${base_name}" link)
     file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${base_name}" target)
-
     if (NOT EXISTS ${link})
-        if (CMAKE_HOST_UNIX)
-            set(command ln -s ${target} ${link})
-        else()
             if (IS_DIRECTORY ${target})
-                set(command cmd.exe /c mklink /j ${link} ${target})
+                set(command cp -a ${target} ${link} )
             else()
-                set(command cmd.exe /c mklink /h ${link} ${target})
+                set(command cp -a ${target} ${link} )
             endif()
-        endif()
 
         execute_process(COMMAND ${command}
             RESULT_VARIABLE result
